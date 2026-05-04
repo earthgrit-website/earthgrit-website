@@ -21,6 +21,26 @@ const PRODUCTS = [
   },
 
   {
+    id: "nutty-balls",
+    image: "images/nutty-balls.jpg",
+    images: ["images/nutty-balls.jpg",
+            "images/nutty-balls2.jpg"],
+    emoji: "🥜",
+    badge: "POPULAR",
+    name: "Nutty Balls",
+    tagline: "Healthy indulgence — satisfy your sweet tooth, guilt-free",
+    priceNow: 8,
+    priceWas: 10,
+    priceNote: "Per pack",
+    unit: "pack",
+    description: "Rich, nut-loaded balls naturally sweetened with dates and figs — no refined sugar. A treat the whole family can enjoy without the guilt. Perfect when you want something sweet but real.",
+    benefits: ["🍬 Satisfies sweet cravings naturally", "🥜 Loaded with almonds, cashews & walnuts", "🚫 No refined sugar — sweetened with dates & figs", "👨‍👩‍👧 Loved by kids & adults alike"],
+    ingredients: "Almond, Cashew, Walnuts, Flax Seeds, Pumpkin Seeds, Sesame Seeds, Sunflower Seeds, Dates, Fig, Clarified Butter (Milk).",
+    nutrition: null,
+    extraNote: ""
+  },
+
+  {
     id: "energy-mix",
     image: "images/energy-mix.jpg",
     images: ["images/energy-mix.jpg",
@@ -76,26 +96,6 @@ const PRODUCTS = [
     ingredients: "Whey Protein (Milk), Crunchy Peanut Butter, Oats, Dates, Honey, Mixed Seeds (Flax, Pumpkin, Sunflower, Melon), Chia Seeds, Cocoa Powder, Mixed Nuts (Almonds, Cashews, Walnuts), Almond Milk.",
     nutrition: null,
     extraNote: "Approx. 10–11g protein per bar"
-  },
-
-  {
-    id: "nutty-balls",
-    image: "images/nutty-balls.jpg",
-    images: ["images/nutty-balls.jpg",
-            "images/nutty-balls2.jpg"],
-    emoji: "🥜",
-    badge: "POPULAR",
-    name: "Nutty Balls",
-    tagline: "Healthy indulgence — satisfy your sweet tooth, guilt-free",
-    priceNow: 8,
-    priceWas: 10,
-    priceNote: "Per pack",
-    unit: "pack",
-    description: "Rich, nut-loaded balls naturally sweetened with dates and figs — no refined sugar. A treat the whole family can enjoy without the guilt. Perfect when you want something sweet but real.",
-    benefits: ["🍬 Satisfies sweet cravings naturally", "🥜 Loaded with almonds, cashews & walnuts", "🚫 No refined sugar — sweetened with dates & figs", "👨‍👩‍👧 Loved by kids & adults alike"],
-    ingredients: "Almond, Cashew, Walnuts, Flax Seeds, Pumpkin Seeds, Sesame Seeds, Sunflower Seeds, Dates, Fig, Clarified Butter (Milk).",
-    nutrition: null,
-    extraNote: ""
   }
 
 ];
