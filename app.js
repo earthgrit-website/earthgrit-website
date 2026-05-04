@@ -96,10 +96,34 @@ function setImage(productId, index) {
   currentImages[productId] = index;
 }
 
+
+
+/* ---------- Auto-detect product images by base name ---------- */
+function getProductImages(base, callback) {
+  const imgs = [];
+  let i = 1;
+
+  function tryNext() {
+    const filename = i === 1 ? base + ".jpg" : base + i + ".jpg";
+    const img = new Image();
+    img.onload = function() {
+      imgs.push(filename);
+      i++;
+      tryNext();
+    };
+    img.onerror = function() {
+      callback(imgs.length ? imgs : [base + ".jpg"]); // fallback to base if nothing found
+    };
+    img.src = filename;
+  }
+
+  tryNext();
+}
+
+
 /* ---------- Build Image HTML ---------- */
 
-function buildImageHTML(p) {
-  const images = Array.isArray(p.images) ? p.images : (p.image ? [p.image] : []);
+function buildImageHTML(p, images) {
 
   if (images.length > 1) {
     return `
@@ -134,10 +158,9 @@ function buildImageHTML(p) {
     </div>`;
 }
 
+/* ---------- Build Card HTML (called by buildProductCard) ---------- */
 
-/* ---------- Build Single Product Card ---------- */
-
-function buildProductCard(p) {
+function buildCardHTML(p, images) {
   const offer        = getOffer(p.id);
   const displayBadge = offer?.badgeText   || p.badge     || '';
   const displayNote  = offer?.displayText || p.priceNote || '';
@@ -145,7 +168,7 @@ function buildProductCard(p) {
   return `
     <div class="pc">
       ${displayBadge ? `<div class="pb">${displayBadge}</div>` : ''}
-      ${buildImageHTML(p)}
+      ${buildImageHTML(p, images)}
       <div class="pb2">
         <div class="pn">${p.name}</div>
         <div class="pt">${p.tagline}</div>
@@ -155,8 +178,6 @@ function buildProductCard(p) {
         </div>
         <div class="ppn">${displayNote}</div>
         ${p.extraNote ? `<div class="pen">✨ ${p.extraNote}</div>` : ''}
-
-        <!-- Expandable Info: edit content in products.js -->
         <details class="pd">
           <summary>📋 Description</summary>
           <div class="pdd"><p>${p.description}</p></div>
@@ -170,8 +191,6 @@ function buildProductCard(p) {
           <summary>📊 Nutrition</summary>
           <div class="pdd"><p>${p.nutrition}</p></div>
         </details>` : ''}
-
-        <!-- Quantity Selector + Add to Bag -->
         <div class="pf">
           <div class="qr">
             <span class="ql">Qty:</span>
@@ -190,10 +209,190 @@ function buildProductCard(p) {
     </div>`;
 }
 
+/* ---------- Build Card HTML (called by buildProductCard) ---------- */
+
+function buildCardHTML(p, images) {
+  const offer        = getOffer(p.id);
+  const displayBadge = offer?.badgeText   || p.badge     || '';
+  const displayNote  = offer?.displayText || p.priceNote || '';
+
+  return `
+    <div class="pc">
+      ${displayBadge ? `<div class="pb">${displayBadge}</div>` : ''}
+      ${buildImageHTML(p, images)}
+      <div class="pb2">
+        <div class="pn">${p.name}</div>
+        <div class="pt">${p.tagline}</div>
+        <div class="pp">
+          <span class="pn2">£${p.priceNow}</span>
+          ${p.priceWas ? `<span class="pw">£${p.priceWas}</span>` : ''}
+        </div>
+        <div class="ppn">${displayNote}</div>
+        ${p.extraNote ? `<div class="pen">✨ ${p.extraNote}</div>` : ''}
+        <details class="pd">
+          <summary>📋 Description</summary>
+          <div class="pdd"><p>${p.description}</p></div>
+        </details>
+        <details class="pd">
+          <summary>🌿 Ingredients</summary>
+          <div class="pdd"><p>${p.ingredients}</p></div>
+        </details>
+        ${p.nutrition ? `
+        <details class="pd">
+          <summary>📊 Nutrition</summary>
+          <div class="pdd"><p>${p.nutrition}</p></div>
+        </details>` : ''}
+        <div class="pf">
+          <div class="qr">
+            <span class="ql">Qty:</span>
+            <div class="qc">
+              <button class="qb" onclick="this.nextElementSibling.value=Math.max(1,this.nextElementSibling.value-1)">-</button>
+              <input class="qi" id="q-${p.id}" type="number" value="1" min="1">
+              <button class="qb" onclick="this.previousElementSibling.value=++this.previousElementSibling.value">+</button>
+            </div>
+          </div>
+          <button class="acb"
+            onclick="addToCart('${p.id}',+document.getElementById('q-${p.id}').value);this.textContent='Added ✓';setTimeout(()=>this.textContent='Add to Bag',1500)">
+            Add to Bag
+          </button>
+        </div>
+      </div>
+    </div>`;
+}
+
+/* ---------- Build Card HTML (called by buildProductCard) ---------- */
+
+function buildCardHTML(p, images) {
+  const offer        = getOffer(p.id);
+  const displayBadge = offer?.badgeText   || p.badge     || '';
+  const displayNote  = offer?.displayText || p.priceNote || '';
+
+  return `
+    <div class="pc">
+      ${displayBadge ? `<div class="pb">${displayBadge}</div>` : ''}
+      ${buildImageHTML(p, images)}
+      <div class="pb2">
+        <div class="pn">${p.name}</div>
+        <div class="pt">${p.tagline}</div>
+        <div class="pp">
+          <span class="pn2">£${p.priceNow}</span>
+          ${p.priceWas ? `<span class="pw">£${p.priceWas}</span>` : ''}
+        </div>
+        <div class="ppn">${displayNote}</div>
+        ${p.extraNote ? `<div class="pen">✨ ${p.extraNote}</div>` : ''}
+        <details class="pd">
+          <summary>📋 Description</summary>
+          <div class="pdd"><p>${p.description}</p></div>
+        </details>
+        <details class="pd">
+          <summary>🌿 Ingredients</summary>
+          <div class="pdd"><p>${p.ingredients}</p></div>
+        </details>
+        ${p.nutrition ? `
+        <details class="pd">
+          <summary>📊 Nutrition</summary>
+          <div class="pdd"><p>${p.nutrition}</p></div>
+        </details>` : ''}
+        <div class="pf">
+          <div class="qr">
+            <span class="ql">Qty:</span>
+            <div class="qc">
+              <button class="qb" onclick="this.nextElementSibling.value=Math.max(1,this.nextElementSibling.value-1)">-</button>
+              <input class="qi" id="q-${p.id}" type="number" value="1" min="1">
+              <button class="qb" onclick="this.previousElementSibling.value=++this.previousElementSibling.value">+</button>
+            </div>
+          </div>
+          <button class="acb"
+            onclick="addToCart('${p.id}',+document.getElementById('q-${p.id}').value);this.textContent='Added ✓';setTimeout(()=>this.textContent='Add to Bag',1500)">
+            Add to Bag
+          </button>
+        </div>
+      </div>
+    </div>`;
+}
+
+/* ---------- Build Card HTML (called by buildProductCard) ---------- */
+
+function buildCardHTML(p, images) {
+  const offer        = getOffer(p.id);
+  const displayBadge = offer?.badgeText   || p.badge     || '';
+  const displayNote  = offer?.displayText || p.priceNote || '';
+
+  return `
+    <div class="pc">
+      ${displayBadge ? `<div class="pb">${displayBadge}</div>` : ''}
+      ${buildImageHTML(p, images)}
+      <div class="pb2">
+        <div class="pn">${p.name}</div>
+        <div class="pt">${p.tagline}</div>
+        <div class="pp">
+          <span class="pn2">£${p.priceNow}</span>
+          ${p.priceWas ? `<span class="pw">£${p.priceWas}</span>` : ''}
+        </div>
+        <div class="ppn">${displayNote}</div>
+        ${p.extraNote ? `<div class="pen">✨ ${p.extraNote}</div>` : ''}
+        <details class="pd">
+          <summary>📋 Description</summary>
+          <div class="pdd"><p>${p.description}</p></div>
+        </details>
+        <details class="pd">
+          <summary>🌿 Ingredients</summary>
+          <div class="pdd"><p>${p.ingredients}</p></div>
+        </details>
+        ${p.nutrition ? `
+        <details class="pd">
+          <summary>📊 Nutrition</summary>
+          <div class="pdd"><p>${p.nutrition}</p></div>
+        </details>` : ''}
+        <div class="pf">
+          <div class="qr">
+            <span class="ql">Qty:</span>
+            <div class="qc">
+              <button class="qb" onclick="this.nextElementSibling.value=Math.max(1,this.nextElementSibling.value-1)">-</button>
+              <input class="qi" id="q-${p.id}" type="number" value="1" min="1">
+              <button class="qb" onclick="this.previousElementSibling.value=++this.previousElementSibling.value">+</button>
+            </div>
+          </div>
+          <button class="acb"
+            onclick="addToCart('${p.id}',+document.getElementById('q-${p.id}').value);this.textContent='Added ✓';setTimeout(()=>this.textContent='Add to Bag',1500)">
+            Add to Bag
+          </button>
+        </div>
+      </div>
+    </div>`;
+}
+
+/* ---------- Build Single Product Card ---------- */
+
+function buildProductCard(p, callback) {
+  if (p.imageBase) {
+    getProductImages(p.imageBase, function(images) {
+      callback(buildCardHTML(p, images));
+    });
+  } else {
+    const images = Array.isArray(p.images) ? p.images : (p.image ? [p.image] : []);
+    callback(buildCardHTML(p, images));
+  }
+}
+
 /* ---------- Build All Products ---------- */
 
 function buildProducts() {
-  document.getElementById('pg').innerHTML = PRODUCTS.map(buildProductCard).join('');
+  const container = document.getElementById('pg');
+  container.innerHTML = '';
+  let built = 0;
+  const cards = new Array(PRODUCTS.length);
+
+  PRODUCTS.forEach(function(p, idx) {
+    buildProductCard(p, function(cardHTML) {
+      cards[idx] = cardHTML;
+      built++;
+      if (built === PRODUCTS.length) {
+        container.innerHTML = cards.join('');
+        initStickyBag();
+      }
+    });
+  });
 }
 
 /* ---------- Display 4 Random 5-Star Reviews ---------- */
@@ -377,8 +576,6 @@ function initStickyBag() {
 buildProducts();
 displayRandomReviews();
 initHeroSlideshow();
-initStickyBag(); 
-
 
 // ============================================================
 // EarthGrit – Stockist Finder (with distance sorting)
@@ -472,3 +669,5 @@ document.addEventListener('DOMContentLoaded', function() {
     if (e.key === 'Enter') findStockists();
   });
 });
+
+
