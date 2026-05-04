@@ -2,9 +2,7 @@ const PRODUCTS = [
 
   {
     id: "energy-bites",
-    image: "images/energy-bites.jpg",
-    images: ["images/energy-bites.jpg",
-            "images/energy-bites2.jpg"],
+    imageBase: "images/energy-bites",
     emoji: "🌿",
     badge: "BESTSELLER",
     name: "Energy Bites",
@@ -22,9 +20,7 @@ const PRODUCTS = [
 
   {
     id: "nutty-balls",
-    image: "images/nutty-balls.jpg",
-    images: ["images/nutty-balls.jpg",
-            "images/nutty-balls2.jpg"],
+    imageBase: "images/nutty-balls",
     emoji: "🥜",
     badge: "POPULAR",
     name: "Nutty Balls",
@@ -42,10 +38,7 @@ const PRODUCTS = [
 
   {
     id: "energy-mix",
-    image: "images/energy-mix.jpg",
-    images: ["images/energy-mix.jpg",
-            "images/energy-mix2.jpg",
-            "images/energy-mix3.jpg"],
+    imageBase: "images/energy-mix",
     emoji: "🌸",
     name: "Energy Mix",
     tagline: "Traditional winter superfood — warming, nourishing, real",
@@ -62,9 +55,7 @@ const PRODUCTS = [
 
   {
     id: "postpartum-delight",
-    image: "images/postpartum-delight.jpg",
-    images: ["images/postpartum-delight.jpg",
-            "images/postpartum-delight2.jpg"],
+    imageBase: "images/postpartum-delight",
     emoji: "🌸",
     name: "Postpartum Delight",
     tagline: "Traditional panjiri for recovery, energy & lactation support",
@@ -81,8 +72,7 @@ const PRODUCTS = [
 
   {
     id: "protein-bars",
-    image: "images/protein-bar.jpg",
-    images: ["images/protein-bar.jpg"],
+    imageBase: "images/protein-bar",
     emoji: "💪",
     badge: "SALE",
     name: "Protein Bars",
