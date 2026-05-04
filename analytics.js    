@@ -1,0 +1,38 @@
+// ============================================================
+// analytics.js — Google Analytics + Cookie Consent
+// GA only loads if user clicks Accept on the cookie banner
+// ============================================================
+
+function loadGA() {
+  var s = document.createElement('script');
+  s.src = 'https://www.googletagmanager.com/gtag/js?id=G-DNT5NBBVRH';
+  s.async = true;
+  document.head.appendChild(s);
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  window.gtag = gtag;
+  gtag('js', new Date());
+  gtag('config', 'G-DNT5NBBVRH');
+}
+
+function acceptCookies() {
+  localStorage.setItem('cookieConsent', 'accepted');
+  document.getElementById('cookie-banner').style.display = 'none';
+  loadGA();
+}
+
+function declineCookies() {
+  localStorage.setItem('cookieConsent', 'declined');
+  document.getElementById('cookie-banner').style.display = 'none';
+}
+
+// On page load — check if user already chose
+(function checkConsent() {
+  var consent = localStorage.getItem('cookieConsent');
+  if (consent === 'accepted') {
+    document.getElementById('cookie-banner').style.display = 'none';
+    loadGA();
+  } else if (consent === 'declined') {
+    document.getElementById('cookie-banner').style.display = 'none';
+  }
+})();
