@@ -41,7 +41,8 @@ const PRODUCTS = [
   {
     id: "postpartum-delight",
     image: "images/postpartum-delight.jpg",
-    images: ["images/postpartum-delight.jpg"],
+    images: ["images/postpartum-delight.jpg",
+             "images/postpartum-delight2.jpg"],
     emoji: "🌸",
     name: "Postpartum Delight",
     tagline: "Traditional postpartum panjiri with lactation-supporting herbs",
