@@ -1,42 +1,21 @@
 /* ============================================================
    EarthGrit – app.js
    Handles: building product cards, image carousel, reviews display
-
    Called last — after offers.js, products.js, reviews.js, cart.js
 ============================================================ */
 
-/* ============================================================
-   HERO SLIDESHOW CONFIG
-   - Add image paths here when ready
-   - Leave array empty [] to disable slideshow (hero stays as normal)
-   - Recommended: 3–5 images, compressed under 200KB each
-   - Put images in: images/hero/ folder
-============================================================ */
-var HERO_SLIDES = [
-   //"images/hero/slide1.jpg",
-   //"images/hero/slide2.jpg",
-   //"images/hero/slide3.jpg"
-];
-
-var HERO_INTERVAL = 4500; // milliseconds between slides
+var HERO_SLIDES = [];
+var HERO_INTERVAL = 4500;
 
 /* ---------- Hero Slideshow Logic ---------- */
-
 function initHeroSlideshow() {
   if (!HERO_SLIDES.length) return;
-
   const circle = document.querySelector('.hcircle');
   if (!circle) return;
-
-  // Get existing logo img
   const existingLogo = circle.querySelector('img');
   const logoSrc = existingLogo ? existingLogo.src : 'logo.jpg';
-
-  // Rebuild circle: slides in background, logo on top
   circle.innerHTML = `
     <div style="position:relative;width:100%;height:100%;border-radius:50%;overflow:hidden;">
-
-      <!-- Slideshow background images -->
       <div id="hero-slides" style="position:absolute;inset:0;border-radius:50%;">
         ${HERO_SLIDES.map((src, idx) => `
           <img src="${src}" alt="EarthGrit slide"
@@ -44,27 +23,19 @@ function initHeroSlideshow() {
                       transition:opacity 0.8s ease;opacity:${idx === 0 ? '1' : '0'};">
         `).join('')}
       </div>
-
-      <!-- Dark overlay so logo stays visible -->
       <div style="position:absolute;inset:0;background:rgba(0,0,0,0.2);border-radius:50%;z-index:1;"></div>
-
-      <!-- Logo on top -->
       <img src="${logoSrc}" alt="EarthGrit"
            style="position:absolute;inset:0;width:100%;height:100%;
-                  object-fit:cover;border-radius:50%;
-                  opacity:0.25;z-index:2;">
+                  object-fit:cover;border-radius:50%;opacity:0.25;z-index:2;">
     </div>`;
-
   let current = 0;
   const imgs = circle.querySelectorAll('#hero-slides img');
-
   setInterval(() => {
     imgs[current].style.opacity = '0';
     current = (current + 1) % imgs.length;
     imgs[current].style.opacity = '1';
   }, HERO_INTERVAL);
 }
-
 
 /* ---------- Image Carousel State ---------- */
 let currentImages = {};
@@ -73,14 +44,10 @@ function changeImage(productId, direction) {
   const carousel = document.getElementById(`carousel-${productId}`);
   const images   = carousel.querySelectorAll('img');
   const dots     = document.querySelectorAll(`.dot-${productId}`);
-
   if (!currentImages[productId]) currentImages[productId] = 0;
-
   images[currentImages[productId]].style.display = 'none';
   if (dots[currentImages[productId]]) dots[currentImages[productId]].style.background = 'rgba(255,255,255,0.5)';
-
   currentImages[productId] = (currentImages[productId] + direction + images.length) % images.length;
-
   images[currentImages[productId]].style.display = 'block';
   if (dots[currentImages[productId]]) dots[currentImages[productId]].style.background = '#fff';
 }
@@ -89,42 +56,27 @@ function setImage(productId, index) {
   const carousel = document.getElementById(`carousel-${productId}`);
   const images   = carousel.querySelectorAll('img');
   const dots     = document.querySelectorAll(`.dot-${productId}`);
-
   images.forEach((img, idx) => { img.style.display = idx === index ? 'block' : 'none'; });
   dots.forEach((dot, idx)   => { dot.style.background = idx === index ? '#fff' : 'rgba(255,255,255,0.5)'; });
-
   currentImages[productId] = index;
 }
-
-
 
 /* ---------- Auto-detect product images by base name ---------- */
 function getProductImages(base, callback) {
   const imgs = [];
   let i = 1;
-
   function tryNext() {
     const filename = i === 1 ? base + ".jpg" : base + i + ".jpg";
     const img = new Image();
-    img.onload = function() {
-      imgs.push(filename);
-      i++;
-      tryNext();
-    };
-    img.onerror = function() {
-      callback(imgs.length ? imgs : [base + ".jpg"]); // fallback to base if nothing found
-    };
+    img.onload = function() { imgs.push(filename); i++; tryNext(); };
+    img.onerror = function() { callback(imgs.length ? imgs : [base + ".jpg"]); };
     img.src = filename;
   }
-
   tryNext();
 }
 
-
 /* ---------- Build Image HTML ---------- */
-
 function buildImageHTML(p, images) {
-
   if (images.length > 1) {
     return `
       <div class="pi" style="position:relative;">
@@ -148,7 +100,6 @@ function buildImageHTML(p, images) {
         <div style="position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,.45);border-radius:6px;padding:3px 7px;color:#fff;font-size:.7rem;z-index:10;pointer-events:none;">🔍 Tap to zoom</div>
       </div>`;
   }
-
   return `
     <div class="pi" style="position:relative;">
       <img src="${images[0]}" alt="${p.name}"
@@ -158,166 +109,11 @@ function buildImageHTML(p, images) {
     </div>`;
 }
 
-/* ---------- Build Card HTML (called by buildProductCard) ---------- */
-
+/* ---------- Build Card HTML ---------- */
 function buildCardHTML(p, images) {
   const offer        = getOffer(p.id);
   const displayBadge = offer?.badgeText   || p.badge     || '';
   const displayNote  = offer?.displayText || p.priceNote || '';
-
-  return `
-    <div class="pc">
-      ${displayBadge ? `<div class="pb">${displayBadge}</div>` : ''}
-      ${buildImageHTML(p, images)}
-      <div class="pb2">
-        <div class="pn">${p.name}</div>
-        <div class="pt">${p.tagline}</div>
-        <div class="pp">
-          <span class="pn2">£${p.priceNow}</span>
-          ${p.priceWas ? `<span class="pw">£${p.priceWas}</span>` : ''}
-        </div>
-        <div class="ppn">${displayNote}</div>
-        ${p.extraNote ? `<div class="pen">✨ ${p.extraNote}</div>` : ''}
-        <details class="pd">
-          <summary>📋 Description</summary>
-          <div class="pdd"><p>${p.description}</p></div>
-        </details>
-        <details class="pd">
-          <summary>🌿 Ingredients</summary>
-          <div class="pdd"><p>${p.ingredients}</p></div>
-        </details>
-        ${p.nutrition ? `
-        <details class="pd">
-          <summary>📊 Nutrition</summary>
-          <div class="pdd"><p>${p.nutrition}</p></div>
-        </details>` : ''}
-        <div class="pf">
-          <div class="qr">
-            <span class="ql">Qty:</span>
-            <div class="qc">
-              <button class="qb" onclick="this.nextElementSibling.value=Math.max(1,this.nextElementSibling.value-1)">-</button>
-              <input class="qi" id="q-${p.id}" type="number" value="1" min="1">
-              <button class="qb" onclick="this.previousElementSibling.value=++this.previousElementSibling.value">+</button>
-            </div>
-          </div>
-          <button class="acb"
-            onclick="addToCart('${p.id}',+document.getElementById('q-${p.id}').value);this.textContent='Added ✓';setTimeout(()=>this.textContent='Add to Bag',1500)">
-            Add to Bag
-          </button>
-        </div>
-      </div>
-    </div>`;
-}
-
-/* ---------- Build Card HTML (called by buildProductCard) ---------- */
-
-function buildCardHTML(p, images) {
-  const offer        = getOffer(p.id);
-  const displayBadge = offer?.badgeText   || p.badge     || '';
-  const displayNote  = offer?.displayText || p.priceNote || '';
-
-  return `
-    <div class="pc">
-      ${displayBadge ? `<div class="pb">${displayBadge}</div>` : ''}
-      ${buildImageHTML(p, images)}
-      <div class="pb2">
-        <div class="pn">${p.name}</div>
-        <div class="pt">${p.tagline}</div>
-        <div class="pp">
-          <span class="pn2">£${p.priceNow}</span>
-          ${p.priceWas ? `<span class="pw">£${p.priceWas}</span>` : ''}
-        </div>
-        <div class="ppn">${displayNote}</div>
-        ${p.extraNote ? `<div class="pen">✨ ${p.extraNote}</div>` : ''}
-        <details class="pd">
-          <summary>📋 Description</summary>
-          <div class="pdd"><p>${p.description}</p></div>
-        </details>
-        <details class="pd">
-          <summary>🌿 Ingredients</summary>
-          <div class="pdd"><p>${p.ingredients}</p></div>
-        </details>
-        ${p.nutrition ? `
-        <details class="pd">
-          <summary>📊 Nutrition</summary>
-          <div class="pdd"><p>${p.nutrition}</p></div>
-        </details>` : ''}
-        <div class="pf">
-          <div class="qr">
-            <span class="ql">Qty:</span>
-            <div class="qc">
-              <button class="qb" onclick="this.nextElementSibling.value=Math.max(1,this.nextElementSibling.value-1)">-</button>
-              <input class="qi" id="q-${p.id}" type="number" value="1" min="1">
-              <button class="qb" onclick="this.previousElementSibling.value=++this.previousElementSibling.value">+</button>
-            </div>
-          </div>
-          <button class="acb"
-            onclick="addToCart('${p.id}',+document.getElementById('q-${p.id}').value);this.textContent='Added ✓';setTimeout(()=>this.textContent='Add to Bag',1500)">
-            Add to Bag
-          </button>
-        </div>
-      </div>
-    </div>`;
-}
-
-/* ---------- Build Card HTML (called by buildProductCard) ---------- */
-
-function buildCardHTML(p, images) {
-  const offer        = getOffer(p.id);
-  const displayBadge = offer?.badgeText   || p.badge     || '';
-  const displayNote  = offer?.displayText || p.priceNote || '';
-
-  return `
-    <div class="pc">
-      ${displayBadge ? `<div class="pb">${displayBadge}</div>` : ''}
-      ${buildImageHTML(p, images)}
-      <div class="pb2">
-        <div class="pn">${p.name}</div>
-        <div class="pt">${p.tagline}</div>
-        <div class="pp">
-          <span class="pn2">£${p.priceNow}</span>
-          ${p.priceWas ? `<span class="pw">£${p.priceWas}</span>` : ''}
-        </div>
-        <div class="ppn">${displayNote}</div>
-        ${p.extraNote ? `<div class="pen">✨ ${p.extraNote}</div>` : ''}
-        <details class="pd">
-          <summary>📋 Description</summary>
-          <div class="pdd"><p>${p.description}</p></div>
-        </details>
-        <details class="pd">
-          <summary>🌿 Ingredients</summary>
-          <div class="pdd"><p>${p.ingredients}</p></div>
-        </details>
-        ${p.nutrition ? `
-        <details class="pd">
-          <summary>📊 Nutrition</summary>
-          <div class="pdd"><p>${p.nutrition}</p></div>
-        </details>` : ''}
-        <div class="pf">
-          <div class="qr">
-            <span class="ql">Qty:</span>
-            <div class="qc">
-              <button class="qb" onclick="this.nextElementSibling.value=Math.max(1,this.nextElementSibling.value-1)">-</button>
-              <input class="qi" id="q-${p.id}" type="number" value="1" min="1">
-              <button class="qb" onclick="this.previousElementSibling.value=++this.previousElementSibling.value">+</button>
-            </div>
-          </div>
-          <button class="acb"
-            onclick="addToCart('${p.id}',+document.getElementById('q-${p.id}').value);this.textContent='Added ✓';setTimeout(()=>this.textContent='Add to Bag',1500)">
-            Add to Bag
-          </button>
-        </div>
-      </div>
-    </div>`;
-}
-
-/* ---------- Build Card HTML (called by buildProductCard) ---------- */
-
-function buildCardHTML(p, images) {
-  const offer        = getOffer(p.id);
-  const displayBadge = offer?.badgeText   || p.badge     || '';
-  const displayNote  = offer?.displayText || p.priceNote || '';
-
   return `
     <div class="pc">
       ${displayBadge ? `<div class="pb">${displayBadge}</div>` : ''}
@@ -363,7 +159,6 @@ function buildCardHTML(p, images) {
 }
 
 /* ---------- Build Single Product Card ---------- */
-
 function buildProductCard(p, callback) {
   if (p.imageBase) {
     getProductImages(p.imageBase, function(images) {
@@ -376,35 +171,29 @@ function buildProductCard(p, callback) {
 }
 
 /* ---------- Build All Products ---------- */
-
 function buildProducts() {
   const container = document.getElementById('pg');
   container.innerHTML = '';
   let built = 0;
   const cards = new Array(PRODUCTS.length);
-
   PRODUCTS.forEach(function(p, idx) {
     buildProductCard(p, function(cardHTML) {
       cards[idx] = cardHTML;
       built++;
       if (built === PRODUCTS.length) {
         container.innerHTML = cards.join('');
-        initStickyBag();
       }
     });
   });
 }
 
 /* ---------- Display 4 Random 5-Star Reviews ---------- */
-
 function displayRandomReviews() {
   if (typeof REVIEWS === 'undefined' || !REVIEWS.length) return;
-
   const selected = REVIEWS
     .filter(r => r.stars === 5)
     .sort(() => 0.5 - Math.random())
     .slice(0, 4);
-
   document.getElementById('reviews-container').innerHTML = selected.map(r => `
     <div class="rc">
       <div class="rs">${'⭐'.repeat(r.stars)}</div>
@@ -414,16 +203,14 @@ function displayRandomReviews() {
   `).join('');
 }
 
-
+/* ---------- Mobile Menu ---------- */
 function toggleMenu() {
   var menu = document.getElementById('mmenu');
-  var btn = document.getElementById('hbtn');
+  var btn  = document.getElementById('hbtn');
   var isOpen = menu.style.display === 'flex';
-
   if (isOpen) {
     menu.style.display = 'none';
     document.body.style.overflow = '';
-    // Reset hamburger lines
     var spans = btn.querySelectorAll('span');
     spans[0].style.transform = '';
     spans[1].style.opacity = '1';
@@ -431,7 +218,6 @@ function toggleMenu() {
   } else {
     menu.style.display = 'flex';
     document.body.style.overflow = 'hidden';
-    // Animate to X
     var spans = btn.querySelectorAll('span');
     spans[0].style.transform = 'translateY(8.75px) rotate(45deg)';
     spans[1].style.opacity = '0';
@@ -439,24 +225,17 @@ function toggleMenu() {
   }
 }
 
-// Show hamburger only on mobile
 (function() {
   var btn = document.getElementById('hbtn');
-  if (window.innerWidth <= 768) {
-    btn.style.display = 'flex';
-  }
+  if (window.innerWidth <= 768) btn.style.display = 'flex';
   window.addEventListener('resize', function() {
     btn.style.display = window.innerWidth <= 768 ? 'flex' : 'none';
   });
 })();
 
-
 /* ============================================================
-   LIGHTBOX — click product image to open full-screen viewer
-   Supports swipe left/right for multiple images
+   LIGHTBOX
 ============================================================ */
-
-// Create lightbox HTML once
 document.addEventListener('DOMContentLoaded', function() {
   var lb = document.createElement('div');
   lb.id = 'lb';
@@ -472,9 +251,6 @@ document.addEventListener('DOMContentLoaded', function() {
   document.body.appendChild(lb);
 });
 
-
-
-
 var LB_IMGS = [], LB_IDX = 0;
 
 function openLB(imgs, idx) {
@@ -485,31 +261,25 @@ function openLB(imgs, idx) {
   document.body.style.overflow = 'hidden';
   lbRender();
 }
-
 function closeLB() {
   document.getElementById('lb').style.display = 'none';
   document.body.style.overflow = '';
 }
-
 function lbNav(dir) {
   LB_IDX = (LB_IDX + dir + LB_IMGS.length) % LB_IMGS.length;
   lbRender();
 }
-
 function lbRender() {
   document.getElementById('lb-img').src = LB_IMGS[LB_IDX];
-  // Show/hide nav arrows
   var showNav = LB_IMGS.length > 1;
   document.getElementById('lb-prev').style.display = showNav ? 'flex' : 'none';
   document.getElementById('lb-next').style.display = showNav ? 'flex' : 'none';
-  // Dots
   var dots = document.getElementById('lb-dots');
   dots.innerHTML = LB_IMGS.length > 1 ? LB_IMGS.map(function(_,i){
     return '<div style="width:8px;height:8px;border-radius:50%;background:'+(i===LB_IDX?'#fff':'rgba(255,255,255,.4)')+'"></div>';
   }).join('') : '';
 }
 
-// Keyboard support
 document.addEventListener('keydown', function(e){
   var lb = document.getElementById('lb');
   if (!lb || lb.style.display === 'none') return;
@@ -518,8 +288,6 @@ document.addEventListener('keydown', function(e){
   if (e.key === 'ArrowRight') lbNav(1);
 });
 
-
-// Touch swipe support for mobile lightbox
 (function(){
   var startX = 0;
   document.addEventListener('touchstart', function(e){
@@ -532,58 +300,16 @@ document.addEventListener('keydown', function(e){
   });
 })();
 
-
-/* Sticky Add to Bag — shows on mobile when card button scrolls out of view */
-function initStickyBag() {
-  if (window.innerWidth > 768) return;
-  var cards = document.querySelectorAll('.pc');
-  var sticky = document.createElement('div');
-  sticky.id = 'sticky-bag';
-  sticky.style.cssText = 'display:none;position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #e8e0d5;padding:12px 16px;z-index:500;box-shadow:0 -4px 16px rgba(0,0,0,.08);';
-  sticky.innerHTML = '<button class="acb" id="sticky-btn" style="width:100%;padding:14px;">Add to Bag</button>';
-  document.body.appendChild(sticky);
-
-  var activeId = null;
-  window.addEventListener('scroll', function() {
-    var found = false;
-    cards.forEach(function(card) {
-      var rect = card.getBoundingClientRect();
-      var btn = card.querySelector('.acb');
-      if (rect.top < window.innerHeight && rect.bottom > 0) {
-        var btnRect = btn.getBoundingClientRect();
-        if (btnRect.bottom > window.innerHeight || btnRect.top < 0) {
-          activeId = card.querySelector('.acb').getAttribute('onclick').match(/'([^']+)'/)[1];
-          var qInput = card.querySelector('.qi');
-          document.getElementById('sticky-btn').onclick = function() {
-            var qty = qInput ? +qInput.value : 1;
-            addToCart(activeId, qty);
-            this.textContent = 'Added ✓';
-            setTimeout(() => this.textContent = 'Add to Bag', 1500);
-          };
-          sticky.style.display = 'block';
-          found = true;
-        }
-      }
-    });
-    if (!found) sticky.style.display = 'none';
-  });
-}
-
-
-
-
 /* ---------- Initialise on Load ---------- */
 buildProducts();
 displayRandomReviews();
 initHeroSlideshow();
 
-// ============================================================
-// EarthGrit – Stockist Finder (with distance sorting)
-// ============================================================
-
-// Haversine formula — calculates distance in miles between two lat/lng points
+/* ============================================================
+   Stockist Finder
+============================================================ */
 function haversineDistance(lat1, lng1, lat2, lng2) {
-  var R = 3958.8; // Earth radius in miles
+  var R = 3958.8;
   var dLat = (lat2 - lat1) * Math.PI / 180;
   var dLng = (lng2 - lng1) * Math.PI / 180;
   var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
@@ -595,45 +321,32 @@ function haversineDistance(lat1, lng1, lat2, lng2) {
 function findStockists() {
   var input = document.getElementById('stockist-postcode').value.trim().toUpperCase().replace(/\s+/g, '');
   var resultsDiv = document.getElementById('stockist-results');
-
   if (!input) {
     resultsDiv.innerHTML = '<p style="color:#c0392b;font-weight:600;">⚠️ Please enter a postcode.</p>';
     return;
   }
-
   if (typeof STOCKISTS === 'undefined' || !STOCKISTS.length) {
     resultsDiv.innerHTML = '<p style="color:#c0392b;">No stockists found. Please try again later.</p>';
     return;
   }
-
-  // Show searching message
   resultsDiv.innerHTML = '<p style="color:#555;">🔍 Searching...</p>';
-
-  // Format postcode for API: insert space before last 3 chars if missing
   var formatted = input.length > 3 ? input.slice(0, -3) + ' ' + input.slice(-3) : input;
-
-  // Look up lat/lng of entered postcode via postcodes.io
   fetch('https://api.postcodes.io/postcodes/' + encodeURIComponent(formatted))
     .then(function(res) { return res.json(); })
     .then(function(data) {
       if (data.status === 200 && data.result) {
         var userLat = data.result.latitude;
         var userLng = data.result.longitude;
-
-        // Calculate distance to each stockist and sort nearest first
         var sorted = STOCKISTS.map(function(s) {
           var dist = haversineDistance(userLat, userLng, s.lat, s.lng);
           return Object.assign({}, s, { distance: dist });
         }).sort(function(a, b) { return a.distance - b.distance; });
-
         renderStockists(resultsDiv, sorted, true);
       } else {
-        // Postcode not found — show all unsorted
         renderStockists(resultsDiv, STOCKISTS, false);
       }
     })
     .catch(function() {
-      // API failed — show all unsorted
       renderStockists(resultsDiv, STOCKISTS, false);
     });
 }
@@ -642,13 +355,13 @@ function renderStockists(resultsDiv, stockists, sorted) {
   var heading = sorted
     ? '📍 EarthGrit stockists — nearest first:'
     : '📍 EarthGrit stockists (Milton Keynes area):';
-
   var html = '<p style="margin-bottom:12px;font-weight:600;color:#2d5a27;">' + heading + '</p>';
   html += '<div style="display:flex;flex-direction:column;gap:14px;">';
-
   stockists.forEach(function(s) {
     var mapsUrl = 'https://maps.google.com/?q=' + encodeURIComponent(s.address + ' ' + s.postcode);
-    var distLabel = s.distance !== undefined ? ' <span style="font-size:0.8rem;color:#888;font-weight:400;">(' + s.distance.toFixed(1) + ' miles away)</span>' : '';
+    var distLabel = s.distance !== undefined
+      ? ' <span style="font-size:0.8rem;color:#888;font-weight:400;">(' + s.distance.toFixed(1) + ' miles away)</span>'
+      : '';
     html += '<div style="background:#fff;border:1px solid #e8e0d5;border-radius:12px;padding:16px;">';
     html += '<div style="font-weight:700;font-size:1rem;color:#2d5a27;margin-bottom:4px;">📍 ' + s.name + distLabel + '</div>';
     html += '<div style="color:#555;font-size:0.9rem;margin-bottom:2px;">' + s.address + '</div>';
@@ -658,7 +371,6 @@ function renderStockists(resultsDiv, stockists, sorted) {
     html += '<a href="' + mapsUrl + '" target="_blank" style="display:inline-block;background:#c8a84b;color:#fff;padding:7px 16px;border-radius:20px;font-size:0.85rem;font-weight:600;text-decoration:none;">🗺 Get Directions →</a>';
     html += '</div>';
   });
-
   html += '</div>';
   resultsDiv.innerHTML = html;
 }
@@ -669,5 +381,3 @@ document.addEventListener('DOMContentLoaded', function() {
     if (e.key === 'Enter') findStockists();
   });
 });
-
-
