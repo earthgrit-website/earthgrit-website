@@ -487,3 +487,59 @@ textarea { min-height: 80px; resize: vertical; }
     gap: 28px;
   }
 }
+
+
+/* ============================================================
+   BUG FIXES — Mobile (iPhone 15 Pro)
+============================================================ */
+
+/* Fix 1 — Add to Bag button: prevent floating/overflow on 2-col grid */
+@media (max-width: 768px) {
+  .pc {
+    display: flex;
+    flex-direction: column;
+  }
+  .pb2 {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .pf {
+    margin-top: auto;
+    position: static !important;
+    bottom: auto !important;
+    width: 100% !important;
+  }
+  .acb {
+    width: 100%;
+    position: static !important;
+    bottom: auto !important;
+    font-size: .82rem;
+    padding: 11px 10px;
+  }
+  /* Tighten image height so cards don't get too tall */
+  .pi {
+    height: 160px !important;
+  }
+}
+
+/* Fix 2 — Cart close button: make clearly visible on mobile */
+.mc {
+  background: #2d5a27 !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 50% !important;
+  width: 38px !important;
+  height: 38px !important;
+  font-size: 1.3rem !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  flex-shrink: 0 !important;
+  line-height: 1 !important;
+}
+.mc:hover {
+  background: #4a7c42 !important;
+}
