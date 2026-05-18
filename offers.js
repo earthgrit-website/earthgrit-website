@@ -10,7 +10,7 @@ const OFFERS = [
     type: "bundle",
     bundleQuantity: 2,           // ✓ Buy 2 boxes
     bundlePrice: 8,              // ✓ Get them for £8 total
-    displayText: "£8 for 2 boxes",
+    displayText: "4 bites per box · approx. 150g · £8 for 2 boxes",
     badgeText: "BUNDLE DEAL"
   },
 
