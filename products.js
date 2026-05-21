@@ -14,7 +14,7 @@ const PRODUCTS = [
     description: "Built for busy days when you need real, lasting energy. Made with nuts, seeds, and jaggery — no refined sugar, no crash. Just clean fuel that keeps you going.",
     benefits: ["⚡ Long-lasting energy — no crash", "🌱 Naturally sweetened with jaggery", "🚫 No refined sugar or preservatives", "✅ Kids & adults love them"],
     ingredients: "Clarified Butter, Almonds, Cashew, Flax Seeds, Pumpkin Seeds, Sunflower Seeds, Sesame Seeds, Oats, Chickpea Flour, Whole Wheat Flour, Jaggery.",
-    nutrition: "Per 100g: Energy 2030 kJ / 485 kcal | Fat 29g (of which saturates 10g) | Carbohydrates 44g (of which sugars 18g) | Fibre 7g | Protein 11g | Salt 0.05g",
+    nutrition: "Approx. nutritional values per 100g: Energy 2030 kJ / 485 kcal | Fat 29g (of which saturates 10g) | Carbohydrates 44g (of which sugars 18g) | Fibre 7g | Protein 11g | Salt 0.05g",
     extraNote: ""
   },
 
@@ -32,7 +32,7 @@ const PRODUCTS = [
     description: "Rich, nut-loaded balls naturally sweetened with dates and figs — no refined sugar. A treat the whole family can enjoy without the guilt. Perfect when you want something sweet but real.",
     benefits: ["🍬 Satisfies sweet cravings naturally", "🥜 Loaded with almonds, cashews & walnuts", "🚫 No refined sugar — sweetened with dates & figs", "👨‍👩‍👧 Loved by kids & adults alike"],
     ingredients: "Almond, Cashew, Walnuts, Flax Seeds, Pumpkin Seeds, Sesame Seeds, Sunflower Seeds, Dates, Fig.",
-    nutrition: "Per 100g: Energy 2090 kJ / 500 kcal | Fat 26g (of which saturates 6.5g) | Carbohydrates 58g (of which sugars 38g) | Fibre 7.5g | Protein 9.5g | Salt 0.05g",
+    nutrition: "Approx. nutritional values per 100g: Energy 2090 kJ / 500 kcal | Fat 26g (of which saturates 6.5g) | Carbohydrates 58g (of which sugars 38g) | Fibre 7.5g | Protein 9.5g | Salt 0.05g",
     extraNote: ""
   },
 
