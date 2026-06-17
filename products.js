@@ -61,7 +61,7 @@ const PRODUCTS = [
     tagline: "Traditional panjiri for recovery, energy & lactation support",
     priceNow: 35,
     priceWas: 42,
-    priceNote: "250g per pack",
+    priceNote: "1kg per pack",
     unit: "kg",
     description: "A rare, traditional panjiri crafted to support new mothers — made with lactation-supporting herbs, warming spices, and nutrient-rich ingredients. Helps restore energy, support milk production, and aid recovery after childbirth. Handmade with care. No preservatives.",
     benefits: ["🤱 Supports lactation & milk production", "💪 Restores energy after childbirth", "🌿 Traditional herbs & warming spices", "🚫 No preservatives or artificial ingredients"],
