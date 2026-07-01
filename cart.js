@@ -12,6 +12,127 @@ var WHATSAPP_NUMBER  = '447344445351';
 
 var cart = [];
 
+/* ---------- Discount Codes ---------- */
+
+var APPROVED_CODES_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTbuWN5ED2ghCJv7BE1AvMj7MHUu4FsZEdBm5qjZZBDoziEr59t5hMlXWy3wxw-3OKTFBF6cFWO7kc1/pub?gid=223784857&single=true&output=csv';
+
+
+var approvedDiscountCodes = [];
+var appliedDiscount = null;
+
+async function loadApprovedDiscountCodes() {
+  try {
+    var res = await fetch(APPROVED_CODES_CSV_URL);
+    var csv = await res.text();
+
+    console.log('Raw CSV:', csv);
+
+    var lines = csv.trim().split(/\r?\n/).filter(Boolean);
+
+    if (!lines.length) {
+      approvedDiscountCodes = [];
+      return;
+    }
+
+    var headers = lines[0].split(',').map(function(h) {
+      return String(h).replace(/^"|"$/g, '').trim();
+    });
+
+    approvedDiscountCodes = lines.slice(1).map(function(line) {
+      var values = line.split(',').map(function(v) {
+        return String(v).replace(/^"|"$/g, '').trim();
+      });
+
+      var obj = {};
+      headers.forEach(function(header, i) {
+        obj[header] = values[i] || '';
+      });
+      return obj;
+    });
+
+    console.log('Parsed approved codes:', approvedDiscountCodes);
+  } catch (err) {
+    console.error('Failed to load approved discount codes:', err);
+    approvedDiscountCodes = [];
+  }
+}
+
+
+
+function applyDiscountCode() {
+  var input = document.getElementById('discount-code-input');
+  var msg = document.getElementById('discount-code-message');
+  if (!input || !msg) return;
+
+  var code = input.value.trim().toUpperCase();
+
+  if (!code) {
+    appliedDiscount = null;
+    msg.textContent = 'Please enter a discount code.';
+    msg.style.color = '#c0392b';
+    renderCart();
+    return;
+  }
+
+
+
+
+var match = approvedDiscountCodes.find(function(item) {
+  var sheetCode = String(item['Discount Code'] || item['Code'] || '').trim().toUpperCase();
+  var sheetStatus = String(item['Status'] || '').trim().toLowerCase();
+  var sheetActive = String(item['Active'] || '').trim().toLowerCase();
+
+  var statusOk = !sheetStatus || sheetStatus === 'approved';
+  var activeOk = !sheetActive || sheetActive === 'yes' || sheetActive === 'true' || sheetActive === 'active';
+
+  return sheetCode === code && statusOk && activeOk;
+});
+
+
+
+  if (!match) {
+    appliedDiscount = null;
+    msg.textContent = 'Invalid or inactive discount code.';
+    msg.style.color = '#c0392b';
+    renderCart();
+    return;
+  }
+
+  appliedDiscount = {
+    code: code,
+    referralId: match['Referral ID'] || '',
+    referralLink: match['Referral Link'] || '',
+    discountPercent: 10
+  };
+
+  msg.textContent = 'Code applied successfully: 10% off.';
+  msg.style.color = '#2d5a27';
+  renderCart();
+}
+
+function getCartSubtotal() {
+  return cart.reduce(function(sum, item) {
+    return sum + calculatePrice(item.id, item.qty, item.priceNow);
+  }, 0);
+}
+
+function getDiscountAmount(subtotal) {
+  if (!appliedDiscount) return 0;
+  return subtotal * (appliedDiscount.discountPercent / 100);
+}
+
+function getCartPricing() {
+  var subtotal = getCartSubtotal();
+  var discountAmount = getDiscountAmount(subtotal);
+  var total = subtotal - discountAmount;
+
+  return {
+    subtotal: subtotal,
+    discountAmount: discountAmount,
+    total: total
+  };
+}
+
 /* ---------- Add / Remove ---------- */
 
 function addToCart(id, qty) {
@@ -49,7 +170,7 @@ function renderCart() {
       (offer.type === 'fixed'      && i.qty >= (offer.minQuantity || 1))
     );
 
-const thumb = i.images ? i.images[0] : (i.image || '');
+    const thumb = i.images ? i.images[0] : (i.image || '');
 
     return `<div class="ci">
       ${thumb ? `<img src="${thumb}" alt="${i.name}" style="width:52px;height:52px;object-fit:cover;border-radius:8px;flex-shrink:0;margin-right:10px;">` : ''}
@@ -69,22 +190,27 @@ const thumb = i.images ? i.images[0] : (i.image || '');
     </div>`;
   }).join('');
 
-  const grandTotal = cart.reduce((s, i) => s + calculatePrice(i.id, i.qty, i.priceNow), 0);
-  
-const FREE_DELIVERY_THRESHOLD = 40;
-const remaining = Math.max(0, FREE_DELIVERY_THRESHOLD - grandTotal);
-const progress = Math.min(100, (grandTotal / FREE_DELIVERY_THRESHOLD) * 100);
+  const pricing = getCartPricing();
+  const grandTotal = pricing.total;
 
-const deliveryBar = remaining > 0
-  ? `<div class="dbar-wrap">
-       <div class="dbar-msg">Add <strong>£${remaining.toFixed(2)}</strong> more for free UK delivery 🚚</div>
-       <div class="dbar-track"><div class="dbar-fill" style="width:${progress}%"></div></div>
-     </div>`
-  : `<div class="dbar-wrap dbar-done">🎉 You've unlocked <strong>free UK delivery!</strong></div>`;
+  const FREE_DELIVERY_THRESHOLD = 40;
+  const remaining = Math.max(0, FREE_DELIVERY_THRESHOLD - pricing.subtotal);
+  const progress = Math.min(100, (pricing.subtotal / FREE_DELIVERY_THRESHOLD) * 100);
 
-list.innerHTML = rows + deliveryBar + `<div class="ctotal">Total: <strong>£${grandTotal.toFixed(2)}</strong></div>`;
+  const deliveryBar = remaining > 0
+    ? `<div class="dbar-wrap">
+         <div class="dbar-msg">Add <strong>£${remaining.toFixed(2)}</strong> more for free UK delivery 🚚</div>
+         <div class="dbar-track"><div class="dbar-fill" style="width:${progress}%"></div></div>
+       </div>`
+    : `<div class="dbar-wrap dbar-done">🎉 You've unlocked <strong>free UK delivery!</strong></div>`;
 
-
+  list.innerHTML =
+    rows +
+    deliveryBar +
+    (appliedDiscount
+      ? `<div class="ctotal" style="color:#2d5a27;">Discount (${appliedDiscount.code}): <strong>-£${pricing.discountAmount.toFixed(2)}</strong></div>`
+      : '') +
+    `<div class="ctotal">Total: <strong>£${grandTotal.toFixed(2)}</strong></div>`;
 }
 
 /* ---------- Cart Count Badge ---------- */
@@ -114,7 +240,6 @@ function getFormValues() {
     dm: (document.querySelector('input[name="delivery"]:checked') || {}).value || 'delivery'
   };
 }
-
 
 function showError(fieldId, msg) {
   var field = document.getElementById(fieldId);
@@ -152,8 +277,6 @@ function validateForm(v) {
   return true;
 }
 
-
-
 /* ---------- Stripe Card Checkout ---------- */
 
 function validateAndCheckout() {
@@ -167,7 +290,8 @@ function validateAndCheckout() {
     price: calculatePrice(i.id, i.qty, i.priceNow)
   }));
 
-  const total = cart.reduce((s, i) => s + calculatePrice(i.id, i.qty, i.priceNow), 0);
+  const pricing = getCartPricing();
+  const total = pricing.total;
 
   const data = {
     orderId:        'EG-' + Date.now(),
@@ -175,7 +299,9 @@ function validateAndCheckout() {
     customer: { name: v.n, email: v.e, phone: '+44' + v.ph, address: v.ad, postcode: v.pc, note: v.nt },
     items:          items,
     total:          parseFloat(total.toFixed(2)),
-    referralUsed:   null,
+    referralUsed:   appliedDiscount ? appliedDiscount.referralId : null,
+    discountCode:   appliedDiscount ? appliedDiscount.code : null,
+    discountAmount: parseFloat(pricing.discountAmount.toFixed(2)),
     timestamp:      new Date().toISOString()
   };
 
@@ -206,9 +332,13 @@ function validateAndWhatsApp() {
   if (!validateForm(v)) return;
 
   const itemsStr = cart.map(i => i.qty + 'x ' + i.name).join('%0A');
-  const total    = cart.reduce((s, i) => s + calculatePrice(i.id, i.qty, i.priceNow), 0).toFixed(2);
-  const msg      = 'Hi! New order from ' + v.n
+  const pricing = getCartPricing();
+  const total = pricing.total.toFixed(2);
+
+  const msg = 'Hi! New order from ' + v.n
     + '%0A%0A' + itemsStr
+    + (appliedDiscount ? '%0A%0ADiscount code: ' + appliedDiscount.code : '')
+    + (appliedDiscount ? '%0ADiscount amount: £' + pricing.discountAmount.toFixed(2) : '')
     + '%0A%0ATotal: £' + total
     + '%0APhone: +44'  + v.ph
     + '%0APostcode: '  + v.pc
@@ -216,3 +346,7 @@ function validateAndWhatsApp() {
 
   window.open('https://wa.me/' + WHATSAPP_NUMBER + '?text=' + msg, '_blank');
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+  loadApprovedDiscountCodes();
+});
