@@ -88,6 +88,7 @@
     <ul class="nl">
       <li><a href="#products">Shop</a></li>
       <li><a href="#why">Why Us</a></li>
+      <li><a href="#ambassador">Ambassador</a></li>
       <li><a href="#reviews">Reviews</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
@@ -120,6 +121,9 @@
   <ul style="list-style:none;padding:0;margin:0;">
     <li><a href="#products" onclick="toggleMenu()" style="color:#fff;text-decoration:none;font-family:'Playfair Display',serif;font-size:clamp(1.6rem,6vw,2.2rem);display:block;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.1);transition:color .2s;" onmouseover="this.style.color='#f5c842'" onmouseout="this.style.color='#fff'">Shop</a></li>
     <li><a href="#why" onclick="toggleMenu()" style="color:#fff;text-decoration:none;font-family:'Playfair Display',serif;font-size:clamp(1.6rem,6vw,2.2rem);display:block;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.1);transition:color .2s;" onmouseover="this.style.color='#f5c842'" onmouseout="this.style.color='#fff'">Why Us</a></li>
+
+    <li><a href="#ambassador" onclick="toggleMenu()" style="color:#fff;text-decoration:none;font-family:'Playfair Display',serif;font-size:clamp(1.6rem,6vw,2.2rem);display:block;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.1);transition:color .2s;" onmouseover="this.style.color='#f5c842'" onmouseout="this.style.color='#fff'">Ambassador</a></li>    
+
     <li><a href="#reviews" onclick="toggleMenu()" style="color:#fff;text-decoration:none;font-family:'Playfair Display',serif;font-size:clamp(1.6rem,6vw,2.2rem);display:block;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.1);transition:color .2s;" onmouseover="this.style.color='#f5c842'" onmouseout="this.style.color='#fff'">Reviews</a></li>
     <li><a href="#contact" onclick="toggleMenu()" style="color:#fff;text-decoration:none;font-family:'Playfair Display',serif;font-size:clamp(1.6rem,6vw,2.2rem);display:block;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.1);transition:color .2s;" onmouseover="this.style.color='#f5c842'" onmouseout="this.style.color='#fff'">Contact</a></li>
   </ul>
@@ -230,6 +234,51 @@
   </div>
 </section>
 
+
+<!-- ===================== AMBASSADOR SECTION ===================== -->
+<section id="ambassador" class="ambassador-s">
+  <details class="ambassador-details">
+    <summary class="ambassador-summary">
+      <div class="ambassador-summary-text">
+        <div class="sl">Ambassador Program</div>
+        <div class="st">Become an EarthGrit Ambassador</div>
+        <div class="ss">Share EarthGrit with your audience and earn rewards.</div>
+      </div>
+      <span class="ambassador-toggle-icon" aria-hidden="true"></span>
+    </summary>
+
+    <div class="ambassador-content">
+      <div class="ambassador-cta-wrap">
+        <a href="#" class="btn-p ambassador-apply-btn" data-ambassador-apply>Apply Now</a>
+      </div>
+
+      <div class="ambassador-mini-grid">
+        <div class="ambassador-mini-card">
+          <div class="ambassador-step-no">01</div>
+          <h3>Apply</h3>
+          <p>Submit your application to join the EarthGrit ambassador programme.</p>
+        </div>
+
+        <div class="ambassador-mini-card">
+          <div class="ambassador-step-no">02</div>
+          <h3>Share</h3>
+          <p>Get your referral link and discount code to share with your audience.</p>
+        </div>
+
+        <div class="ambassador-mini-card">
+          <div class="ambassador-step-no">03</div>
+          <h3>Earn</h3>
+          <p>Earn 10% commission while your followers receive 10% off.</p>
+        </div>
+      </div>
+
+      <div class="ambassador-benefits-bar">
+        <span>10% commission</span>
+        <span>10% follower discount</span>
+      </div>
+    </div>
+  </details>
+</section>
 
 
 <!-- ===================== OUR STORY SECTION ===================== -->
@@ -544,8 +593,30 @@
         <input type="text" id="cust-note" placeholder="Gift message, etc.">
       </label>
 
-      
+ <div id="discount-code-wrap" style="margin:14px 0 10px;">
+  <label for="discount-code-input" style="display:block;font-weight:600;margin-bottom:8px;">
+   Discount Code
+  </label>
 
+  <div style="display:flex;gap:10px;align-items:stretch;flex-wrap:wrap;">
+    <input
+      type="text"
+      id="discount-code-input"
+      placeholder="Enter code e.g. VIVEK10"
+      style="flex:1;min-width:220px;padding:12px 14px;border:1.5px solid #e8e0d5;border-radius:10px;font-size:.95rem;background:#fff;color:#222;"
+    >
+
+    <button
+      type="button"
+      onclick="applyDiscountCode()"
+      style="padding:12px 18px;border:none;border-radius:10px;background:#1f6b57;color:#fff;font-weight:700;cursor:pointer;min-width:120px;"
+    >
+      Apply Code
+    </button>
+  </div>
+
+  <div id="discount-code-message" style="margin-top:8px;font-size:.88rem;color:#6b6b6b;"></div>
+</div>
 
 
       <!-- Checkout Buttons -->
@@ -586,6 +657,7 @@
   <script src="stockists.js"></script>
   <script src="app.js"></script>
   <script src="stall.js"></script>
+  <script src="referrals.js"></script>
   <script src="analytics.js"></script>
 
 
@@ -608,11 +680,17 @@
     document.getElementById('cookie-banner').style.display = 'none';
   }
 
-  function acceptCookies() {
-    localStorage.setItem('cookieConsent', 'accepted');
-    document.getElementById('cookie-banner').style.display = 'none';
-    loadGA();
+
+function acceptCookies() {
+  localStorage.setItem('cookieConsent', 'accepted');
+  document.getElementById('cookie-banner').style.display = 'none';
+  loadGA();
+
+  if (window.EarthGritReferral && typeof window.EarthGritReferral.tryCaptureReferralAfterConsent === 'function') {
+    window.EarthGritReferral.tryCaptureReferralAfterConsent();
   }
+}
+
 
   function declineCookies() {
     localStorage.setItem('cookieConsent', 'declined');
