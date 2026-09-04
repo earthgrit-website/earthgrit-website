@@ -6,34 +6,44 @@ const PRODUCTS = [
     emoji: "🌿",
     badge: "BESTSELLER",
     name: "Energy Bites",
-    tagline: "Everyday energy — no sugar crash, no compromises",
+    tagline: "Traditional flavour — made for busy days",
     priceNow: 5,
     priceWas: 6.99,
     priceNote: "4 bites per box · approx. 150g",
     unit: "box (4 bites)",
-    description: "Built for busy days when you need real, lasting energy. Made with nuts, seeds, and jaggery — no refined sugar, no crash. Just clean fuel that keeps you going.",
-    benefits: ["⚡ Long-lasting energy — no crash", "🌱 Naturally sweetened with jaggery", "🚫 No refined sugar or preservatives", "✅ Kids & adults love them"],
-    ingredients: "Clarified Butter, Almonds, Cashew, Flax Seeds, Pumpkin Seeds, Sunflower Seeds, Sesame Seeds, Oats, Chickpea Flour, Whole Wheat Flour, Jaggery.",
+    description: "Inspired by traditional recipes and handmade in small batches with jaggery, ghee, nuts, oats and a blend of four seeds. A nutty snack made for busy days.",
+    benefits: ["⚡ Traditional recipes", "🌱 Naturally sweetened with jaggery", "Handmade in UK", "✅ Kids & adults love them"],
+   ingredients: '<span class="ingredients-inline">Palm Jaggery (22.94%), Ghee (<strong>MILK</strong>) (14.34%), Chickpea Flour (12.99%), Whole <strong>WHEAT</strong> Flour (12.99%), <strong>OATS</strong> (12.99%), <strong>ALMONDS</strong> (5.16%), <strong>CASHEWS</strong> (5.16%), Water, Flax Seeds (2.01%), Pumpkin Seeds (2.01%), Sunflower Seeds (2.01%), <strong>SESAME</strong> Seeds (2.01%), Cardamom (0.23%).</span>',
     nutrition: "Approx. nutritional values per 100g: Energy 2030 kJ / 485 kcal | Fat 29g (of which saturates 10g) | Carbohydrates 44g (of which sugars 18g) | Fibre 7g | Protein 11g | Salt 0.05g",
-    extraNote: ""
+    extraNote:
+    "<strong>Allergy advice:</strong> For allergens, see ingredients in <strong>bold</strong>."
   },
 
   {
     id: "nutty-balls",
     imageBase: "images/nutty-balls",
-    emoji: "🥜",
+    emoji: "✨",
     badge: "POPULAR",
     name: "Nutty Balls",
-    tagline: "Healthy indulgence — satisfy your sweet tooth, guilt-free",
+    tagline: "Tasty indulgence — for your sweet tooth",
     priceNow: 8,
     priceWas: 10,
-    priceNote: "200g per pack",
+    priceNote: "Net weight: 200 g",
     unit: "pack",
-    description: "Rich, nut-loaded balls naturally sweetened with dates and figs — no refined sugar. A treat the whole family can enjoy without the guilt. Perfect when you want something sweet but real.",
-    benefits: ["🍬 Satisfies sweet cravings naturally", "🥜 Loaded with almonds, cashews & walnuts", "🚫 No refined sugar — sweetened with dates & figs", "👨‍👩‍👧 Loved by kids & adults alike"],
-    ingredients: "Almond, Cashew, Walnuts, Flax Seeds, Pumpkin Seeds, Sesame Seeds, Sunflower Seeds, Dates, Fig.",
-    nutrition: "Approx. nutritional values per 100g: Energy 2090 kJ / 500 kcal | Fat 26g (of which saturates 6.5g) | Carbohydrates 58g (of which sugars 38g) | Fibre 7.5g | Protein 9.5g | Salt 0.05g",
-    extraNote: ""
+    description: "Made with dates, figs, almonds, cashews, walnuts and a blend of flax, pumpkin, sesame and sunflower seeds. Handmade in small batches for a rich, fruity and nutty taste.",
+      benefits: [
+    "🤲 Handmade in small batches",
+    "✓ Made with dates & figs",
+    "✓ Almonds, cashews & walnuts",
+    "✓ Four-seed blend"
+  ],
+
+ingredients: '<span class="ingredients-inline">Dates (47.85%), Figs (Figs, Preservative: Potassium Sorbate) (9.57%), <strong>ALMONDS</strong> (7.66%), Flax Seeds (6.22%), Pumpkin Seeds (6.22%), <strong>SESAME</strong> Seeds (6.22%), Sunflower Seeds (6.22%), <strong>CASHEWS</strong> (5.74%), <strong>WALNUTS</strong> (3.83%), Cardamom (0.48%).</span>',
+
+  nutrition: "Typical values per 100 g: Energy 1813 kJ / 434 kcal | Fat 22 g (of which saturates 3.0 g) | Carbohydrate 45 g (of which sugars 37 g) | Fibre 8.5 g | Protein 9.6 g | Salt 0.09 g",
+
+    extraNote:
+    "<strong>Allergy advice:</strong> For allergens, see ingredients in <strong>bold</strong>."
   },
 
   {
@@ -41,27 +51,38 @@ const PRODUCTS = [
     imageBase: "images/energy-mix",
     emoji: "🌸",
     name: "Energy Mix",
-    tagline: "Traditional winter superfood — warming, nourishing, real",
+    tagline: "Traditional sweet wheat, nut & seed mix",
     priceNow: 7,
     priceWas: 9,
-    priceNote: "250g per pack",
+    priceNote: "Net weight: 250 g",
     unit: "pack",
-    description: "A slow-roasted blend of wheat, ghee, nuts and warming spices — made the traditional way. Perfect as a postpartum comfort food or a nourishing winter snack. No preservatives, no shortcuts.",
-    benefits: ["🔥 Warming & deeply nourishing", "🤱 Ideal postpartum comfort food", "🌰 Loaded with nuts & seeds", "🚫 No preservatives or artificial ingredients"],
-    ingredients: "Almonds, Cashews, Walnuts, Flax seeds, Pumpkin seeds, Sesame seeds, Sunflower seeds, Raisin, Wholewheat flour, Semolina, Jaggery, Clarified butter (Milk), Cardamom, Lotus seeds, Edible gum.",
-    nutrition: null,
-    extraNote: ""
+    description: "A slow-roasted blend of wheat, ghee, nuts , seeds and warming spices — made the traditional way.",
+benefits: [
+  "🌿 Rooted in tradition",
+  "🤲 Handmade in small batches",
+  "🌰 Made with nuts & seeds",
+  "✨ Rich, nutty & gently spiced"
+],
+   ingredients: '<span class="ingredients-inline">Whole <strong>WHEAT</strong> Flour (36.43%), Jaggery Powder (17.48%), Ghee (<strong>MILK</strong>) (16.39%), <strong>WHEAT</strong> Semolina (8.96%), <strong>ALMONDS</strong> (3.93%), <strong>CASHEWS</strong> (2.91%), <strong>WALNUTS</strong> (2.91%), Raisins (2.91%), Flax Seeds (1.78%), Pumpkin Seeds (1.78%), Sunflower Seeds (1.78%), <strong>SESAME</strong> Seeds (1.78%), Fox Nuts (0.44%), Cardamom (0.33%), Edible Gum (0.22%).</span>',
+
+    nutrition: "Typical values per 100 g: Energy 2035 kJ / 487 kcal | Fat 26.2 g (of which saturates 11.0 g) | Carbohydrate 50.1 g (of which sugars 18.8 g) | Fibre 6.1 g | Protein 9.8 g | Salt 0.08 g",
+
+    extraNote:
+    "<strong>Allergy advice:</strong> For allergens, see ingredients in <strong>bold</strong>."
   },
+
+
+
 
   {
     id: "postpartum-delight",
     imageBase: "images/postpartum-delight",
     emoji: "🌸",
     name: "Postpartum Delight",
-    tagline: "Traditional panjiri for recovery, energy & lactation support",
+    tagline: "Traditional panjiri - A spiced mix of nuts, seeds and raisins made with wheat flour",
     priceNow: 35,
     priceWas: 42,
-    priceNote: "1kg per pack",
+    priceNote: "1 Kg per pack",
     unit: "kg",
     description: "A rare, traditional panjiri crafted to support new mothers — made with lactation-supporting herbs, warming spices, and nutrient-rich ingredients. Helps restore energy, support milk production, and aid recovery after childbirth. Handmade with care. No preservatives.",
     benefits: ["🤱 Supports lactation & milk production", "💪 Restores energy after childbirth", "🌿 Traditional herbs & warming spices", "🚫 No preservatives or artificial ingredients"],
@@ -69,6 +90,10 @@ const PRODUCTS = [
     nutrition: null,
     extraNote: ""
   },
+
+
+
+
 
   {
     id: "protein-bars",
