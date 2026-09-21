@@ -84,11 +84,10 @@ benefits: [
     priceWas: 42,
     priceNote: "1 Kg per pack",
     unit: "kg",
-    description: "A rare, traditional panjiri crafted to support new mothers — made with lactation-supporting herbs, warming spices, and nutrient-rich ingredients. Helps restore energy, support milk production, and aid recovery after childbirth. Handmade with care. No preservatives.",
-    benefits: ["🤱 Supports lactation & milk production", "💪 Restores energy after childbirth", "🌿 Traditional herbs & warming spices", "🚫 No preservatives or artificial ingredients"],
+    description: "Inspired by traditional panjiri recipes and handmade in small batches with wheat, ghee, jaggery, nuts, seeds, raisins, edible gum, ginger, fenugreek, cardamom and Kamar Kas.",
     ingredients: "Almonds, Cashews, Walnuts, Ghee (Milk), Flax Seeds, Sunflower Seeds, Pumpkin Seeds, Sesame Seeds, Raisins, Edible Gum (Gond), Dry Ginger, Kamar Kas, Fenugreek Powder, Cardamom Powder, Wheat Flour (Gluten), Semolina (Gluten), Jaggery, Makhana (Fox Nuts).",
     nutrition: null,
-    extraNote: ""
+    extraNote: "<strong>Allergy advice:</strong> For allergens, see ingredients in <strong>bold</strong>."
   },
 
 
