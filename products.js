@@ -85,7 +85,7 @@ benefits: [
     priceNote: "1 Kg per pack",
     unit: "kg",
     description: "Inspired by traditional panjiri recipes and handmade in small batches with wheat, ghee, jaggery, nuts, seeds, raisins, edible gum, ginger, fenugreek, cardamom and Kamar Kas.",
-    ingredients: "Almonds, Cashews, Walnuts, Ghee (Milk), Flax Seeds, Sunflower Seeds, Pumpkin Seeds, Sesame Seeds, Raisins, Edible Gum (Gond), Dry Ginger, Kamar Kas, Fenugreek Powder, Cardamom Powder, Wheat Flour (Gluten), Semolina (Gluten), Jaggery, Makhana (Fox Nuts).",
+    ingredients: "Wheat Flour, Jaggery, Ghee (Milk), Semolina (Durum Wheat), Almonds, Cashews, Walnuts, Raisins, Flax Seeds, Sunflower Seeds, Pumpkin Seeds, Sesame Seeds, Puffed Lotus seed, Edible Gum (Gond), Dry Ginger, Fenugreek Powder, Cardamom",
     nutrition: null,
     extraNote: "<strong>Allergy advice:</strong> For allergens, see ingredients in <strong>bold</strong>."
   },
