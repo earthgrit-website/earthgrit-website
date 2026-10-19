@@ -121,9 +121,11 @@ benefits: [
     unit: "pack",
     description: "Traditional Wheat & Nut Sweet with Jaggery & Ghee",
 
-    ingredients: "Atta (WHEAT Flour) (36.06%), Jaggery (24.04%), Ghee (MILK) (15.02%), ALMONDS (9.01%), CASHEWS (6.01%), Raisins (6.01%), Melon Seeds (3.00%), Cardamom (0.60%), Edible Gum (Gond) (0.24%).",
+ingredients: '<span class="ingredients-inline">Atta (<strong>WHEAT</strong> Flour) (36.06%), Jaggery (24.04%), Ghee (<strong>MILK</strong>) (15.02%), <strong>ALMONDS</strong> (9.01%), <strong>CASHEWS</strong> (6.01%), Green Raisins (6.01%), Melon Seeds (3.00%), Cardamom (0.60%), Edible Gum (Gond) (0.24%).</span>',
+
     nutrition: "Typical values per 100 g: Energy 1943 kJ / 463 kcal | Fat 24.3 g (of which saturates 10.7 g) | Carbohydrate 52.5 g (of which sugars 26.7 g) | Fibre 6.8 g | Protein 8.7 g | Salt 0.10 g",
-    extraNote: ""
+    extraNote:
+    "<strong>Allergy advice:</strong> For allergens, see ingredients in <strong>bold</strong>."
   }
 
 ];
